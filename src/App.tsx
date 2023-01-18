@@ -25,14 +25,17 @@ const App = ({
     handleSubmit,
     register,
     formState: { errors, isSubmitting }
-  } = useForm({ mode: "onBlur" });
+  } = useForm({ mode: "all" });
 
   const onSubmit = async (values) => {
 
     values = { ...values, location_id: values.location, location_label: locations.find(l => l.id.toString() === values.location.toString())?.label }
     console.log('vvvv', values)
     try {
-      const { data } = await axios.post('http://localhost:3080/api/ep_requests', values)
+
+      const { data } = await axios.post('https://lk.novorostorgi.ru/api/v1/ep_request/send', values)
+      // const { data } = await axios.post('http://127.0.0.1:8002/api/v1/ep_request/send', values)
+      // const { data } = await axios.post('http://localhost:3080/api/ep_requests', values)
       alert("Данные отправлены. В ближайшее время с вами свяжется сотрудник")
     }
     catch (err) {
