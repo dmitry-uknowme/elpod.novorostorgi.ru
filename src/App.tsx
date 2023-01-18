@@ -11,7 +11,8 @@ import {
   Text,
   Card,
   Box,
-  Select
+  Select,
+  Link, Checkbox
 } from "@chakra-ui/react";
 import { Divider } from "rsuite";
 
@@ -52,7 +53,7 @@ const App = ({
               <hr />
               {/* <Divider /> */}
               <Text textAlign='center' fontSize='sm' marginTop="0.5rem">Чтобы приступить к оформлению электронной подписи в партнерском Удостоверяющем центре, заполните поля информации в форме ниже</Text>
-              <Card paddingX="2rem" paddingBottom="2rem" marginTop="2rem">
+              <Card paddingX="2rem" paddingBottom="2rem" paddingTop="2rem" marginTop="2rem">
                 <FormControl isInvalid={!!errors.org_inn}>
                   <FormLabel fontSize="md">ИНН организации</FormLabel>
                   <Input id="org_inn" {...register("org_inn", { required: "Поле обязательное для заполнения" })} />
@@ -99,6 +100,8 @@ const App = ({
                     {errors.location && errors.location.message}
                   </FormErrorMessage>
                 </FormControl>
+                <Checkbox style={{ marginTop: "1rem" }}>Даю согласие на обработку моих персональных данных в соответствии с <Link color='teal.500' href='#'>
+                  Политикой обработки персональных данных</Link></Checkbox>
                 <Button mt="2rem" colorScheme="blue" isLoading={isSubmitting} type="submit">
                   Отправить
                 </Button>
