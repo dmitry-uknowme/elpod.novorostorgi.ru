@@ -12,7 +12,7 @@ import {
   Card,
   Box,
   Select,
-  Link, Checkbox
+  Link, Checkbox, Editable, EditablePreview, EditableTextarea, Textarea
 } from "@chakra-ui/react";
 import { Divider } from "rsuite";
 
@@ -40,8 +40,6 @@ const App = ({
   console.log('errrr', errors)
 
 
-
-
   return (
     <Box p={4}>
       <div className="row">
@@ -51,7 +49,6 @@ const App = ({
             <form onSubmit={handleSubmit(onSubmit)}>
               <Text textAlign='center' fontSize='3xl' fontWeight='bold' marginBottom="0.5rem">Заявка на получение электронной подписи</Text>
               <hr />
-              {/* <Divider /> */}
               <Text textAlign='center' fontSize='sm' marginTop="0.5rem">Чтобы приступить к оформлению электронной подписи в партнерском Удостоверяющем центре, заполните поля информации в форме ниже</Text>
               <Card paddingX="2rem" paddingBottom="2rem" paddingTop="2rem" marginTop="2rem">
                 <FormControl isInvalid={!!errors.org_inn}>
@@ -92,16 +89,17 @@ const App = ({
                 <FormControl isInvalid={!!errors.location} mt="1rem">
                   <FormLabel fontSize="md">Выберите локацию</FormLabel>
                   <Select id="location"  {...register("location", { required: "Поле обязательное для заполнения" })}>
-                    <option value='option1'>Локация 1</option>
-                    <option value='option2'>Локация 2</option>
-                    <option value='option3'>Локация 3</option>
+                    <option value='option1'>400074, Волгоградская обл, г Волгоград, ул Рабоче-Крестьянская, д. 30, офис 310</option>
+                    <option value='option2'>344000, Ростовская обл, Ростов-на-Дону г, Лермонтовская ул, дом № 87/66, офис 404</option>
+                    <option value='option3'>Курский филиал № 2 АО "АЦ" (а) Курская область, Г.О. ГОРОД КУРСК, Г КУРСК, УЛ ВАТУТИНА, Д. 25, ПОМ/КОМ 9/21</option>
                   </Select>
                   <FormErrorMessage>
                     {errors.location && errors.location.message}
                   </FormErrorMessage>
                 </FormControl>
-                <Checkbox style={{ marginTop: "1rem" }}>Даю согласие на обработку моих персональных данных в соответствии с <Link color='teal.500' href='#'>
+                <Checkbox style={{ margin: "1rem 0" }}>Даю согласие на обработку моих персональных данных в соответствии с <Link color='teal.500' href='#'>
                   Политикой обработки персональных данных</Link></Checkbox>
+                <Textarea disabled defaultValue="Инструкция..................................................................." />
                 <Button mt="2rem" colorScheme="blue" isLoading={isSubmitting} type="submit">
                   Отправить
                 </Button>
@@ -109,188 +107,8 @@ const App = ({
             </form >
           </Box>
         </div>
-
       </div>
-
     </Box >
-    // <form onSubmit={handleSubmit(onSubmit)}>
-    //   <FormControl isInvalid={true}>
-    //     <FormLabel htmlFor="name">First name</FormLabel>
-    //     <Input
-    //       id="name"
-    //       placeholder="name"
-    //       {...register("name", {
-    //         required: "This is required",
-    //         minLength: { value: 4, message: "Minimum length should be 4" }
-    //       })}
-    //     />
-    //     <FormErrorMessage>
-    //       {errors.name && errors.name.message}
-    //     </FormErrorMessage>
-    //   </FormControl>
-    //   <Button mt={4} colorScheme="teal" isLoading={isSubmitting} type="submit">
-    //     Submit
-    //   </Button>
-    // </form>
-    // <>
-    //   <h2 className="text-center">Заявка на получение электронной подписи</h2>
-    //   <form onSubmit={submitHandler}>
-    //     <div className="row justify-content-center">
-    //       {/*<form>*/}
-    //       {serverResponse ? (
-    //         <div className="d-flex justify-content-center text-center">
-    //           {serverResponse}
-    //         </div>
-    //       ) : isFetching ? (
-    //         <Loader />
-    //       ) : (
-    //         <div className="row justify-content-center">
-    //           {/*{sections.map((section) => (*/}
-    //           <div className="col-md-10">
-    //             <h6 className="text-center">
-    //               Чтобы приступить к оформлению электронной подписи в
-    //               партнерском Удостоверяющем центре, заполните поля информации
-    //               в форме ниже
-    //             </h6>
-    //             <div className="col-lg-8 offset-lg-2 col-md-12 mt-4">
-    //               <div className="form-group">
-    //                 <input
-    //                   className="form-control"
-    //                   name="name"
-    //                   placeholder="ИНН Организации (ИП, ООО)"
-    //                   value={formData.organization_id}
-    //                   required
-    //                   onChange={(e) =>
-    //                     setFormData((state) => ({
-    //                       ...state,
-    //                       organization_id: e.target.value,
-    //                     }))
-    //                   }
-    //                 />
-    //               </div>
-    //               <div className="form-group mt-3">
-    //                 {/*<label htmlFor='email'>Email адрес в системе</label>*/}
-    //                 <input
-    //                   className="form-control"
-    //                   name="name"
-    //                   placeholder="ИНН физ. лица (руководителя организации)"
-    //                   value={formData.person_id}
-    //                   required
-    //                   onChange={(e) =>
-    //                     setFormData((state) => ({
-    //                       ...state,
-    //                       person_id: e.target.value,
-    //                     }))
-    //                   }
-    //                 />
-    //               </div>
-    //               <div className="form-group mt-3">
-    //                 {/*<label htmlFor='email'>Email адрес в системе</label>*/}
-    //                 <input
-    //                   className="form-control"
-    //                   name="name"
-    //                   placeholder="Фамилия Имя Отчество"
-    //                   value={formData.person_name}
-    //                   required
-    //                   onChange={(e) =>
-    //                     setFormData((state) => ({
-    //                       ...state,
-    //                       person_name: e.target.value,
-    //                     }))
-    //                   }
-    //                 />
-    //               </div>
-    //               <div className="form-group mt-3">
-    //                 {/*<label htmlFor='email'>Email адрес в системе</label>*/}
-    //                 <input
-    //                   className="form-control"
-    //                   name="phone"
-    //                   placeholder="Контактный номер телефона"
-    //                   value={formData.person_phone}
-    //                   required
-    //                   onChange={(e) =>
-    //                     setFormData((state) => ({
-    //                       ...state,
-    //                       person_phone: e.target.value,
-    //                     }))
-    //                   }
-    //                 />
-    //               </div>
-    //               <div className="form-group mt-3">
-    //                 {/*<label htmlFor='email'>Email адрес в системе</label>*/}
-    //                 <input
-    //                   className="form-control"
-    //                   name="phone"
-    //                   type="email"
-    //                   placeholder="Адрес электронной почты"
-    //                   value={formData.person_email}
-    //                   required
-    //                   onChange={(e) =>
-    //                     setFormData((state) => ({
-    //                       ...state,
-    //                       person_email: e.target.value,
-    //                     }))
-    //                   }
-    //                 />
-    //               </div>
-    //               {/* <div className="form-group mt-3">
-    //                 <input
-    //                   className="form-control"
-    //                   name="phone"
-    //                   placeholder="Паспортные данные (серия, номер, дата выдачи, кем выдан )"
-    //                   value={formData.person_passport}
-    //                   required
-    //                   onChange={(e) =>
-    //                     setFormData((state) => ({
-    //                       ...state,
-    //                       person_passport: e.target.value,
-    //                     }))
-    //                   }
-    //                 />
-    //               </div> */}
-    //               <div className="form-check mt-3">
-    //                 <input
-    //                   className="form-check-input"
-    //                   type="checkbox"
-    //                   name="status_accreditation"
-    //                   value="not_accredited"
-    //                   required
-    //                 // onChange={inputHandler}
-    //                 // checked={formData.find((field) => field.name === 'status_accreditation').value === 'not_accredited'} /* checked={(e) => formData.find((field) => field)} onChange={inputHandler} */
-    //                 />
-    //                 <label
-    //                   className="form-check-label text-muted"
-    //                   htmlFor="status_accreditation"
-    //                   style={{ fontSize: "0.65rem" }}
-    //                 >
-    //                   Даю согласие на обработку моих персональных данных в
-    //                   соответствии с{" "}
-    //                   <a
-    //                     href="/files/Политика обработки персональных данных.pdf"
-    //                     target="_blank"
-    //                   >
-    //                     <u
-    //                       className="text-primary"
-    //                       style={{ cursor: "pointer" }}
-    //                     >
-    //                       Политикой обработки персональных данных
-    //                     </u>
-    //                   </a>
-    //                 </label>
-    //               </div>
-    //               <div className="d-flex justify-content-center mt-3 mb-5">
-    //                 <button className="btn btn-primary w-100 d-flex justify-content-center">
-    //                   Отправить заявку
-    //                 </button>
-    //               </div>
-    //             </div>
-    //           </div>
-    //         </div>
-    //       )}
-    //       {/*</form>*/}
-    //     </div>
-    //   </form>
-    // </>
   );
 };
 
