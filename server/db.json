@@ -1,0 +1,93 @@
+{
+  "ep_requests": [
+    {
+      "da": "da",
+      "id": 1
+    },
+    {
+      "id": 2
+    },
+    {
+      "org_inn": "da",
+      "person_inn": "da",
+      "person_fullname": "da",
+      "person_phone_number": "da",
+      "person_email": "da",
+      "location": "option1",
+      "id": 3
+    },
+    {
+      "org_inn": "da",
+      "person_inn": "da",
+      "person_fullname": "Сотрудник Сотрудник Сотрудник",
+      "person_phone_number": "+8(927)333-8310",
+      "person_email": "participant2@mail.ru",
+      "location": "1",
+      "id": 4
+    },
+    {
+      "org_inn": "da",
+      "person_inn": "da",
+      "person_fullname": "Дмитрий Сергеевич Богатырев",
+      "person_phone_number": "+79273338310",
+      "person_email": "bogatyrov200488@gmail.com",
+      "location": "3",
+      "location_id": "3",
+      "id": 5
+    },
+    {
+      "org_inn": "da",
+      "person_inn": "da",
+      "person_fullname": "Дмитрий Сергеевич Богатырев",
+      "person_phone_number": "+79273338310",
+      "person_email": "bogatyrov200488@gmail.com",
+      "location": "3",
+      "location_id": "3",
+      "location_label": {
+        "id": 3,
+        "label": "Филиал №2 АО \"АЦ\" в г. Старый Оскол (а): Белгородская область, Г.О. СТАРООСКОЛЬСКИЙ, Г СТАРЫЙ ОСКОЛ, МКР ВОСТОЧНЫЙ, Д. 1Б, ПОМ/КАБ 3/4"
+      },
+      "id": 6
+    },
+    {
+      "org_inn": "da",
+      "person_inn": "da",
+      "person_fullname": "Дмитрий Сергеевич Богатырев",
+      "person_phone_number": "+79273338310",
+      "person_email": "bogatyrov200488@gmail.com",
+      "location": "3",
+      "location_id": "3",
+      "location_label": "Филиал №2 АО \"АЦ\" в г. Старый Оскол (а): Белгородская область, Г.О. СТАРООСКОЛЬСКИЙ, Г СТАРЫЙ ОСКОЛ, МКР ВОСТОЧНЫЙ, Д. 1Б, ПОМ/КАБ 3/4",
+      "id": 7
+    },
+    {
+      "org_inn": "da",
+      "person_inn": "da",
+      "person_fullname": "Дмитрий Сергеевич Богатырев",
+      "person_phone_number": "+79273338310",
+      "person_email": "bogatyrov200488@gmail.com",
+      "location": "3",
+      "location_id": "3",
+      "location_label": "Филиал №2 АО \"АЦ\" в г. Старый Оскол (а): Белгородская область, Г.О. СТАРООСКОЛЬСКИЙ, Г СТАРЫЙ ОСКОЛ, МКР ВОСТОЧНЫЙ, Д. 1Б, ПОМ/КАБ 3/4",
+      "id": 8
+    }
+  ],
+  "locations": [
+    {
+      "id": 1,
+      "label": "Белгородский филиал № 1 АО \"АЦ\" (а): БЕЛГОРОДСКАЯ ОБЛАСТЬ, Г. БЕЛГОРОД, ПР-КТ СЛАВЫ, ДОМ 28, ПОМЕЩЕНИЕ 833, номер телефона 8 800 101 41 40"
+    },
+    {
+      "id": 2,
+      "label": "Белгородский филиал №2 АО \"АЦ\" (а): Г БЕЛГОРОД ПР-КТ Б.ХМЕЛЬНИЦКОГО Д. 133М ПОМ/КАБ 1001/9 тел. 8 800 1014140"
+    },
+    {
+      "id": 3,
+      "label": "Филиал №2 АО \"АЦ\" в г. Старый Оскол (а): Белгородская область, Г.О. СТАРООСКОЛЬСКИЙ, Г СТАРЫЙ ОСКОЛ, МКР ВОСТОЧНЫЙ, Д. 1Б, ПОМ/КАБ 3/4"
+    },
+    {
+      "id": 4,
+      "label": "Брянский филиал АО \"АЦ\" (а): БРЯНСКАЯ ОБЛАСТЬ, Г. БРЯНСК, УЛ. КАЛИНИНА, ДОМ 98 А, ОФИС 219. тел: 8-800-101-41-40"
+    }
+  ]
+}
