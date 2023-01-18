@@ -13,3 +13,17 @@ services:
       NODE_ENV: development
       DEBUG: nodejs-docker-express:*
     restart: always
+  elpod-server:
+    build:
+      context: ./
+      target: dev
+    volumes:
+      - .:/app
+    command: yarn run server
+    ports:
+      - "3080:3080"
+    environment:
+      NODE_ENV: development
+      DEBUG: nodejs-docker-express:*
+    restart: always
+  

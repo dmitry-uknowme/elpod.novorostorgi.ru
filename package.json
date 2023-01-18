@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "server": "node server/index.cjs",
-    "container": "sudo docker-compose up --build -d elpod",
+    "container": "sudo docker-compose up --build -d",
     "dev": "vite --port 3070 --host",
     "build": "tsc && vite build",
     "preview": "vite preview"

@@ -20,8 +20,8 @@ server.use([
   cors({ origin: "*" }),
 ]);
 
-// const BASE_URL = "http://localhost:3080";
-const BASE_URL = "https://elpod.novorostorgi.ru:3080";
+const BASE_URL = "http://localhost:3080";
+// const SERVER_URL = "https://elpod.novorostorgi.ru/api";
 
 server.post("/api/ep_requests", async (req, res) => {
   try {

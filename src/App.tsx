@@ -25,8 +25,8 @@ const App = ({
     handleSubmit,
     register,
     formState: { errors, isSubmitting }
-  } = useForm({ mode: "all" });
-
+  } = useForm({ mode: "onBlur" });
+  const SERVER_URL = "https://elpod.novorostorgi.ru/api"
   const onSubmit = async (values) => {
 
     values = { ...values, location_id: values.location, location_label: locations.find(l => l.id.toString() === values.location.toString())?.label }
@@ -50,7 +50,6 @@ const App = ({
     //   }, 3000);
     // });
   }
-  const SERVER_URL = "http://localhost:3080"
 
   const fetchLocations = async () => {
     const { data } = await axios.get(`${SERVER_URL}/locations`)
