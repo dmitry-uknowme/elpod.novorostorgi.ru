@@ -26,13 +26,13 @@ const App = ({
     register,
     formState: { errors, isSubmitting }
   } = useForm({ mode: "onBlur" });
-
+  const SERVER_URL = "https://elpod.novorostorgi.ru/api"
   const onSubmit = async (values) => {
 
     values = { ...values, location_id: values.location, location_label: locations.find(l => l.id.toString() === values.location.toString())?.label }
     console.log('vvvv', values)
     try {
-      const { data } = await axios.post('http://localhost:3080/api/ep_requests', values)
+      const { data } = await axios.post(`${SERVER_URL}/api/ep_requests`, values)
       alert("Данные отправлены. В ближайшее время с вами свяжется сотрудник")
     }
     catch (err) {
@@ -47,7 +47,6 @@ const App = ({
     //   }, 3000);
     // });
   }
-  const SERVER_URL = "http://localhost:3080"
 
   const fetchLocations = async () => {
     const { data } = await axios.get(`${SERVER_URL}/locations`)
