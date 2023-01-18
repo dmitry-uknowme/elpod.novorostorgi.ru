@@ -14,16 +14,18 @@ import {
   Select,
   Link, Checkbox, Editable, EditablePreview, EditableTextarea, Textarea
 } from "@chakra-ui/react";
-import { Divider } from "rsuite";
+import { useToast } from '@chakra-ui/react'
 
 
 const App = ({
 
 }) => {
+  const toast = useToast()
   const [locations, setLocations] = useState([])
   const {
     handleSubmit,
     register,
+    setValue,
     formState: { errors, isSubmitting }
   } = useForm({ mode: "all" });
   const API_URL = "https://lk.novorostorgi.ru/api/v1"
@@ -33,21 +35,24 @@ const App = ({
     values = { ...values, location_id: values.location, location_label: locations.find(l => l.id.toString() === values.location.toString())?.label }
     console.log('vvvv', values)
     try {
+      await axios.post(`${BASE_URL}/ep_requests`, values)
       const { data } = await axios.post(`${API_URL}/ep_request/send`, values)
-      // const { data } = await axios.post(`${API_URL}/ep_requests`, values)
-      alert("Данные отправлены. В ближайшее время с вами свяжется сотрудник")
+      toast({
+        title: 'Заявка успешно отправлена. В ближайшее время с вами свяжется сотрудник',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      })
+
     }
     catch (err) {
-      alert("Возникла ошибка на сервере. Пожалуйста попробуйте повторить запрос позже")
+      toast({
+        title: 'Возникла ошибка на сервере. Пожалуйста попробуйте повторить запрос позже',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      })
     }
-
-    // return new Promise((resolve) => {
-    //   setTimeout(() => {
-    //     alert("Возникла ошибка на сервере. Пожалуйста попробуйте повторить запрос позже")
-    //     // alert(JSON.stringify(values, null, 2));
-    //     resolve();
-    //   }, 3000);
-    // });
   }
 
   const fetchLocations = async () => {
