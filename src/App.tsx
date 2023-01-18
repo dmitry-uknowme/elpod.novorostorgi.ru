@@ -25,14 +25,16 @@ const App = ({
     handleSubmit,
     register,
     formState: { errors, isSubmitting }
-  } = useForm({ mode: "onBlur" });
-  const SERVER_URL = "https://elpod.novorostorgi.ru/api"
+  } = useForm({ mode: "all" });
+  const API_URL = "https://lk.novorostorgi.ru/api/v1"
+  const BASE_URL = "https://elpod.novorostorgi.ru/api/api"
   const onSubmit = async (values) => {
 
     values = { ...values, location_id: values.location, location_label: locations.find(l => l.id.toString() === values.location.toString())?.label }
     console.log('vvvv', values)
     try {
-      const { data } = await axios.post(`${SERVER_URL}/api/ep_requests`, values)
+      const { data } = await axios.post(`${API_URL}/ep_request/send`, values)
+      // const { data } = await axios.post(`${API_URL}/ep_requests`, values)
       alert("Данные отправлены. В ближайшее время с вами свяжется сотрудник")
     }
     catch (err) {
@@ -49,7 +51,7 @@ const App = ({
   }
 
   const fetchLocations = async () => {
-    const { data } = await axios.get(`${SERVER_URL}/locations`)
+    const { data } = await axios.get(`${BASE_URL}/locations`)
     setLocations(data)
   }
 
