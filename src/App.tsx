@@ -14,46 +14,57 @@ import {
   Select,
   Link, Checkbox, Editable, EditablePreview, EditableTextarea, Textarea
 } from "@chakra-ui/react";
-import { Divider } from "rsuite";
+import { useToast } from '@chakra-ui/react'
+import { InfoIcon } from '@chakra-ui/icons'
 
 
 const App = ({
 
 }) => {
+  const [isBtnDisabled, setBtnDisabled] = useState(false)
+  const toast = useToast()
   const [locations, setLocations] = useState([])
   const {
     handleSubmit,
     register,
+    setValue,
     formState: { errors, isSubmitting }
-  } = useForm({ mode: "onBlur" });
-  const SERVER_URL = "https://elpod.novorostorgi.ru/api"
+  } = useForm({ mode: "all" });
+  const API_URL = "https://lk.novorostorgi.ru/api/v1"
+  const BASE_URL = "https://elpod.novorostorgi.ru/api/api"
   const onSubmit = async (values) => {
 
     values = { ...values, location_id: values.location, location_label: locations.find(l => l.id.toString() === values.location.toString())?.label }
     console.log('vvvv', values)
     try {
-
-      const { data } = await axios.post('https://lk.novorostorgi.ru/api/v1/ep_request/send', values)
-      // const { data } = await axios.post('http://127.0.0.1:8002/api/v1/ep_request/send', values)
-      // const { data } = await axios.post('http://localhost:3080/api/ep_requests', values)
-      alert("Данные отправлены. В ближайшее время с вами свяжется сотрудник")
+      await axios.post(`${BASE_URL}/ep_requests`, values)
+      const { data } = await axios.post(`${API_URL}/ep_request/send`, values)
+      toast({
+        position: "top",
+        title: 'Заявка успешно отправлена. В ближайшее время с вами свяжется сотрудник',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
     }
     catch (err) {
-      alert("Возникла ошибка на сервере. Пожалуйста попробуйте повторить запрос позже")
+      setBtnDisabled(true)
+      setTimeout(() => setBtnDisabled(false), 4500)
+      toast({
+        position: "top",
+        title: 'Возникла ошибка при отправке заявки. Пожалуйста попробуйте повторить запрос позже',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
     }
-
-    // return new Promise((resolve) => {
-    //   setTimeout(() => {
-    //     alert("Возникла ошибка на сервере. Пожалуйста попробуйте повторить запрос позже")
-    //     // alert(JSON.stringify(values, null, 2));
-    //     resolve();
-    //   }, 3000);
-    // });
   }
 
   const fetchLocations = async () => {
-    const { data } = await axios.get(`${SERVER_URL}/locations`)
+    const { data } = await axios.get(`${BASE_URL}/locations`)
+    if (!data?.length) return
     setLocations(data)
+    setValue('location', data[0]?.id)
   }
 
   console.log('errrr', errors)
@@ -123,7 +134,7 @@ const App = ({
                   </FormErrorMessage>
                 </FormControl>
                 <FormControl isInvalid={!!errors.location} mt="1rem">
-                  <FormLabel fontSize="md">Выберите локацию</FormLabel>
+                  <FormLabel fontSize="md">Выберите пункт выдачи</FormLabel>
                   <Select id="location"  {...register("location", { required: "Поле обязательное для заполнения" })}>
                     {locations?.map(loc => (<option value={loc.id}>{loc.label}</option>))}
                   </Select>
@@ -131,10 +142,38 @@ const App = ({
                     {errors.location && errors.location.message}
                   </FormErrorMessage>
                 </FormControl>
-                <Checkbox required style={{ margin: "1rem 0" }}>Даю согласие на обработку моих персональных данных в соответствии с <Link color='teal.500' href='#'>
-                  Политикой обработки персональных данных</Link></Checkbox>
-                <Textarea style={{ pointerEvents: "none" }} disabled defaultValue="Инструкция..................................................................." />
-                <Button mt="2rem" colorScheme="blue" isLoading={isSubmitting} type="submit">
+                {/* <Checkbox required style={{ margin: "1rem 0" }}>Даю согласие на обработку моих персональных данных в соответствии с <Link color='teal.500' href='#'>
+                  Политикой обработки персональных данных</Link></Checkbox> */}
+                <div style={{
+                  overflowY: "scroll", border: "1px solid #90cdf4",
+                  padding: "1rem",
+                  borderRight: 0,
+                  marginTop: "2rem"
+                }}>
+                  <Text fontSize='1xl' fontWeight='bold' marginBottom="0.5rem" style={{ alignItems: "center" }}><InfoIcon />&nbsp;Памятка</Text>
+                  <p>Уважаемые коллеги!</p>
+                  <p>Для получения ЭП (электронной подписи) для руководителя вам необходимо перейти по указанной ниже ссылке, заполнить:</p>
+                  <ul style={{ marginLeft: "0.5rem", marginInlineStart: "0.5rem" }}>
+                    <li style={{ marginInlineStart: "1rem" }}>Наименование организации</li>
+                    <li style={{ marginInlineStart: "1rem" }}>ИНН организации</li>
+                    <li style={{ marginInlineStart: "1rem" }}>ФИО руководителя</li>
+                    <li style={{ marginInlineStart: "1rem" }}>Телефон</li>
+                    <li style={{ marginInlineStart: "1rem" }}>Адрес эл. почты</li>
+                  </ul>
+                  <p className="mt-3">Далее выбрать из представленного списка удобный для Вас пункт выдачи.</p>
+                  <p className="mt-2">
+                    При получении в точке выдачи при вас должен быть следующий пакет документов:
+                  </p>
+                  <ul style={{ marginLeft: "0.5rem", marginInlineStart: "0.5rem" }}>
+                    <li style={{ marginInlineStart: "1rem" }}>Паспорт руководителя</li>
+                    <li style={{ marginInlineStart: "1rem" }}>СНИЛС</li>
+                    <li style={{ marginInlineStart: "1rem" }}>ИНН руководителя организации</li>
+                    <li style={{ marginInlineStart: "1rem" }}>Телефон</li>
+                    <li style={{ marginInlineStart: "1rem" }}>Печать организации</li>
+                  </ul>
+                </div>
+                {/* <Textarea style={{ pointerEvents: "none" }} disabled>dad<br />gaga</Textarea> */}
+                <Button mt="2rem" colorScheme="blue" isLoading={isSubmitting} disabled={isBtnDisabled} type="submit">
                   Отправить
                 </Button>
               </Card>
