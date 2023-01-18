@@ -30,7 +30,8 @@ const App = ({
     console.log('vvvv', values)
     return new Promise((resolve) => {
       setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
+        alert("Возникла ошибка на сервере. Пожалуйста попробуйте повторить запрос позже")
+        // alert(JSON.stringify(values, null, 2));
         resolve();
       }, 3000);
     });
@@ -99,7 +100,7 @@ const App = ({
                 </FormControl>
                 <Checkbox style={{ margin: "1rem 0" }}>Даю согласие на обработку моих персональных данных в соответствии с <Link color='teal.500' href='#'>
                   Политикой обработки персональных данных</Link></Checkbox>
-                <Textarea disabled defaultValue="Инструкция..................................................................." />
+                <Textarea style={{ pointerEvents: "none" }} disabled defaultValue="Инструкция..................................................................." />
                 <Button mt="2rem" colorScheme="blue" isLoading={isSubmitting} type="submit">
                   Отправить
                 </Button>
