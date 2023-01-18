@@ -3,7 +3,7 @@ FROM node:lts as base
 WORKDIR /app
 COPY package*.json /
 # COPY yarn.lock /
-EXPOSE 3010
+EXPOSE 3070
 
 
 # FROM base as prod
