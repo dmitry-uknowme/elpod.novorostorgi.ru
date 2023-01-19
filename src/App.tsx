@@ -81,7 +81,42 @@ const App = ({
               <hr />
               <Text textAlign='center' fontSize='sm' marginTop="0.5rem">Чтобы приступить к оформлению электронной подписи в партнерском Удостоверяющем центре, заполните поля информации в форме ниже</Text>
               <Card paddingX="2rem" paddingBottom="2rem" paddingTop="2rem" marginTop="2rem">
-                <FormControl isInvalid={!!errors.org_title}>
+                <div style={{
+                  overflowY: "scroll", border: "1px solid #90cdf4",
+                  padding: "1rem",
+                  borderRight: 0,
+                  marginTop: "2rem",
+                  height: "250px"
+                }}>
+                  {/* <Text fontSize='1xl' fontWeight='bold' marginBottom="0.5rem" style={{ alignItems: "center" }}><InfoIcon /></Text> */}
+                  <p><InfoIcon />&nbsp;&nbsp;Уважаемые коллеги!</p>
+                  <p>Для получения электронной подписи (ЭП) для руководителя организации  Вам необходимо ознакомиться с кратким порядком получения услуги.
+                    Оказание услуги регулируется  Федеральным законом "Об электронной подписи" от 06.04.2011 N 63-ФЗ.
+                    Для получения услуги необходимо заполнить нижеследующие поля:</p>
+                  <ul style={{ marginLeft: "0.5rem", marginInlineStart: "0.5rem" }}>
+                    <li style={{ marginInlineStart: "1rem" }}>Наименование организации</li>
+                    <li style={{ marginInlineStart: "1rem" }}>ИНН организации организации</li>
+                    <li style={{ marginInlineStart: "1rem" }}>ИНН руководителя организации</li>
+                    <li style={{ marginInlineStart: "1rem" }}>ФИО руководителя организации</li>
+                    <li style={{ marginInlineStart: "1rem" }}>Телефон</li>
+                    <li style={{ marginInlineStart: "1rem" }}>Адрес эл. почты</li>
+                  </ul>
+                  <p className="mt-3">Далее выбрать из представленного списка удобный для Вас пункт выдачи.</p>
+                  <p className="mt-2">
+                    После отправки формы с Вами свяжется оператор, который согласует дату и время оказания услуги, удобную для заявителя.
+                  </p>
+                  <p className="mt-2">
+                    При получении в точке выдачи при Вас должен быть следующий пакет документов:
+                  </p>
+                  <ul style={{ marginLeft: "0.5rem", marginInlineStart: "0.5rem" }}>
+                    <li style={{ marginInlineStart: "1rem" }}>Паспорт руководителя организации</li>
+                    <li style={{ marginInlineStart: "1rem" }}>СНИЛС руководителя организации</li>
+                    <li style={{ marginInlineStart: "1rem" }}>ИНН руководителя организации</li>
+                    <li style={{ marginInlineStart: "1rem" }}>Печать организации</li>
+                  </ul>
+                  <p className="mt-4">При отправке заполненной формы заявитель соглашается с обработкой данных, и их хранением, согласно Федерального закона "О персональных данных" от 27.07.2006 N 152-ФЗ.</p>
+                </div>
+                <FormControl isInvalid={!!errors.org_title} mt="2.5rem">
                   <FormLabel fontSize="md">Наименование организации</FormLabel>
                   <Input id="org_title" {...register("org_title", {
                     required: "Поле обязательное для заполнения"
@@ -90,7 +125,7 @@ const App = ({
                     {errors.org_title && errors.org_title.message}
                   </FormErrorMessage>
                 </FormControl>
-                <FormControl isInvalid={!!errors.org_inn}>
+                <FormControl isInvalid={!!errors.org_inn} mt="1rem">
                   <FormLabel fontSize="md">ИНН организации</FormLabel>
                   <Input id="org_inn" {...register("org_inn", {
                     required: "Поле обязательное для заполнения", validate: (value) => {
@@ -102,7 +137,7 @@ const App = ({
                   </FormErrorMessage>
                 </FormControl>
                 <FormControl isInvalid={!!errors.person_inn} mt="1rem">
-                  <FormLabel fontSize="md">ИНН физического лица</FormLabel>
+                  <FormLabel fontSize="md">ИНН руководителя организации</FormLabel>
                   <Input id="person_inn" {...register("person_inn", {
                     required: "Поле обязательное для заполнения", validate: (value) => {
                       return value.trim().length === 12 ? true : "Введен неверный ИНН физического лица"
@@ -113,7 +148,7 @@ const App = ({
                   </FormErrorMessage>
                 </FormControl>
                 <FormControl isInvalid={!!errors.person_fullname} mt="1rem">
-                  <FormLabel fontSize="md">Фамилия Имя Отчество</FormLabel>
+                  <FormLabel fontSize="md">Фамилия Имя Отчество руководителя организации</FormLabel>
                   <Input id="person_fullname" {...register("person_fullname", { required: "Поле обязательное для заполнения" })} />
                   <FormErrorMessage>
                     {errors.person_fullname && errors.person_fullname.message}
@@ -144,34 +179,8 @@ const App = ({
                 </FormControl>
                 {/* <Checkbox required style={{ margin: "1rem 0" }}>Даю согласие на обработку моих персональных данных в соответствии с <Link color='teal.500' href='#'>
                   Политикой обработки персональных данных</Link></Checkbox> */}
-                <div style={{
-                  overflowY: "scroll", border: "1px solid #90cdf4",
-                  padding: "1rem",
-                  borderRight: 0,
-                  marginTop: "2rem"
-                }}>
-                  <Text fontSize='1xl' fontWeight='bold' marginBottom="0.5rem" style={{ alignItems: "center" }}><InfoIcon />&nbsp;Памятка</Text>
-                  <p>Уважаемые коллеги!</p>
-                  <p>Для получения ЭП (электронной подписи) для руководителя вам необходимо перейти по указанной ниже ссылке, заполнить:</p>
-                  <ul style={{ marginLeft: "0.5rem", marginInlineStart: "0.5rem" }}>
-                    <li style={{ marginInlineStart: "1rem" }}>Наименование организации</li>
-                    <li style={{ marginInlineStart: "1rem" }}>ИНН организации</li>
-                    <li style={{ marginInlineStart: "1rem" }}>ФИО руководителя</li>
-                    <li style={{ marginInlineStart: "1rem" }}>Телефон</li>
-                    <li style={{ marginInlineStart: "1rem" }}>Адрес эл. почты</li>
-                  </ul>
-                  <p className="mt-3">Далее выбрать из представленного списка удобный для Вас пункт выдачи.</p>
-                  <p className="mt-2">
-                    При получении в точке выдачи при вас должен быть следующий пакет документов:
-                  </p>
-                  <ul style={{ marginLeft: "0.5rem", marginInlineStart: "0.5rem" }}>
-                    <li style={{ marginInlineStart: "1rem" }}>Паспорт руководителя</li>
-                    <li style={{ marginInlineStart: "1rem" }}>СНИЛС</li>
-                    <li style={{ marginInlineStart: "1rem" }}>ИНН руководителя организации</li>
-                    <li style={{ marginInlineStart: "1rem" }}>Телефон</li>
-                    <li style={{ marginInlineStart: "1rem" }}>Печать организации</li>
-                  </ul>
-                </div>
+
+
                 {/* <Textarea style={{ pointerEvents: "none" }} disabled>dad<br />gaga</Textarea> */}
                 <Button mt="2rem" colorScheme="blue" isLoading={isSubmitting} disabled={isBtnDisabled} type="submit">
                   Отправить
