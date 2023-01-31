@@ -17,11 +17,19 @@ import {
 import { useToast } from '@chakra-ui/react'
 import { InfoIcon } from '@chakra-ui/icons'
 
+const validateEmail = (email: string): boolean => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
 
 const App = ({
 
 }) => {
   const [isBtnDisabled, setBtnDisabled] = useState(false)
+  const [orderNumber, setOrderNumber] = useState(null)
   const toast = useToast()
   const [locations, setLocations] = useState([])
   const {
@@ -32,16 +40,33 @@ const App = ({
   } = useForm({ mode: "all" });
   const API_URL = "https://lk.novorostorgi.ru/api/v1"
   const BASE_URL = "https://elpod.novorostorgi.ru/api/api"
+
   const onSubmit = async (values) => {
 
-    values = { ...values, location_id: values.location, location_label: locations.find(l => l.id.toString() === values.location.toString())?.label }
+    values = { ...values, location_id: values.location.toString(), location_label: locations.find(l => l.id.toString() === values.location.toString())?.label }
     console.log('vvvv', values)
     try {
-      await axios.post(`${BASE_URL}/ep_requests`, values)
-      const { data } = await axios.post(`${API_URL}/ep_request/send`, values)
+      const { data: data1 } = await axios.post(`${BASE_URL}/ep_requests`, {
+        ...values, date_time: new Date().toLocaleTimeString("ru-RU", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          timeZone: "Asia/Yekaterinburg",
+        }) + " " + new Date().toLocaleDateString("ru-RU", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          timeZone: "Asia/Yekaterinburg",
+        })
+      })
+      if (!data1.id) return
+      setOrderNumber(data1.id)
+      values = { ...values, order_number: data1.id }
+      const { data: data2 } = await axios.post(`${API_URL}/ep_request/send`, values)
       toast({
         position: "top",
-        title: 'Заявка успешно отправлена. В ближайшее время с вами свяжется сотрудник',
+        title: `Ваша заявка номер ${data1.id} отправлена. В ближайшее время с Вами свяжется оператор`,
+        // title: 'Заявка успешно отправлена. В ближайшее время с вами свяжется сотрудник',
         status: 'success',
         duration: 5000,
         isClosable: true,
@@ -82,11 +107,11 @@ const App = ({
               <Text textAlign='center' fontSize='sm' marginTop="0.5rem">Чтобы приступить к оформлению электронной подписи в партнерском Удостоверяющем центре, заполните поля информации в форме ниже</Text>
               <Card paddingX="2rem" paddingBottom="2rem" paddingTop="2rem" marginTop="2rem">
                 <div style={{
-                  overflowY: "scroll", border: "1px solid #90cdf4",
+                  // overflowY: "scroll", border: "1px solid #90cdf4",
                   padding: "1rem",
                   borderRight: 0,
                   marginTop: "2rem",
-                  height: "250px"
+                  // height: "250px"
                 }}>
                   {/* <Text fontSize='1xl' fontWeight='bold' marginBottom="0.5rem" style={{ alignItems: "center" }}><InfoIcon /></Text> */}
                   <p><InfoIcon />&nbsp;&nbsp;Уважаемые коллеги!</p>
@@ -148,7 +173,7 @@ const App = ({
                   </FormErrorMessage>
                 </FormControl>
                 <FormControl isInvalid={!!errors.person_fullname} mt="1rem">
-                  <FormLabel fontSize="md">Фамилия Имя Отчество руководителя организации</FormLabel>
+                  <FormLabel fontSize="md">ФИО руководителя организации</FormLabel>
                   <Input id="person_fullname" {...register("person_fullname", { required: "Поле обязательное для заполнения" })} />
                   <FormErrorMessage>
                     {errors.person_fullname && errors.person_fullname.message}
@@ -163,7 +188,11 @@ const App = ({
                 </FormControl>
                 <FormControl isInvalid={!!errors.person_email} mt="1rem">
                   <FormLabel fontSize="md">Адрес электронной почты</FormLabel>
-                  <Input id="person_email" {...register("person_email", { required: "Поле обязательное для заполнения" })} />
+                  <Input id="person_email" {...register("person_email", {
+                    required: "Поле обязательное для заполнения", validate: (value) => {
+                      return validateEmail(value) ? true : "Введен некорректный email адрес"
+                    }
+                  })} />
                   <FormErrorMessage>
                     {errors.person_email && errors.person_email.message}
                   </FormErrorMessage>
