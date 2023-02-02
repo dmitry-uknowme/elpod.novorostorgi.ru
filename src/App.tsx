@@ -13,11 +13,6 @@ import {
   Box,
   Select,
   Link,
-  Checkbox,
-  Editable,
-  EditablePreview,
-  EditableTextarea,
-  Textarea,
   Tabs,
   Tab,
   TabList,
@@ -71,8 +66,8 @@ const App = ({}) => {
     "passport_date",
     "passport_code",
   ]);
-
-  // const
+  const watchSnilsData = watch("snils_number");
+  const watchInnData = watch("person_inn");
 
   const isPassportDataFilled =
     // !!watchPassportData.find((item) => Object.hasOwn(errors, item)) &&
@@ -81,14 +76,18 @@ const App = ({}) => {
       ? true
       : false;
 
-  const isPassportFileUploaded = !!(watchFiles[2] && watchFiles[2][0]?.name);
+  const isInnDataFilled =
+    !!(watchInnData && watchInnData?.trim()?.length) &&
+    !Object.hasOwn(errors, "person_inn");
+  const isSnilsDataFilled = !!(
+    watchSnilsData &&
+    watchSnilsData?.trim()?.length &&
+    !Object.hasOwn(errors, "snils_number")
+  );
 
-  console.log("is passport alll", {
-    watchPassportData,
-    errors,
-    isPassportDataFilled,
-    isPassportFileUploaded,
-  });
+  const isInnFileUploaded = !!(watchFiles[0] && watchFiles[0][0]?.name);
+  const isSnilsFileUploaded = !!(watchFiles[1] && watchFiles[1][0]?.name);
+  const isPassportFileUploaded = !!(watchFiles[2] && watchFiles[2][0]?.name);
 
   const onSubmit = async (values) => {
     const innFile = values?.file_snils?.length
@@ -96,7 +95,6 @@ const App = ({}) => {
       : null;
     const snilsFile = await toBase64(values.file_snils[0]);
     const passportFile = await toBase64(values.file_passport[0]);
-    // const formData = new Form();
     values = {
       ...values,
       location_id: values.location.toString(),
@@ -106,13 +104,19 @@ const App = ({}) => {
       file_inn: innFile,
       file_snils: snilsFile,
       file_passport: passportFile,
+
       // file_inn: values?.file_inn?.length ? values?.file_inn[0] : null,
       // file_snils: values?.file_snils?.length ? values?.file_snils[0] : null,
       // file_passport: values?.file_passport?.length
       //   ? values?.file_passport[0]
       //   : null,
     };
-    // console.log("vvvv", values);
+
+    // delete values["file_inn"];
+    // delete values["file_snils"];
+    // delete values["file_passport"];
+    delete values["location"];
+    console.log("vvvv", values);
     // const formData = new FormData();
 
     // Object.keys(values).map((key) => formData.append(key, values[key]));
@@ -123,7 +127,8 @@ const App = ({}) => {
     // console.log("ffff", formData);
     try {
       const { data: data1 } = await axios.post(
-        "https://elpod.novorostorgi.ru/api/v1/lead/add",
+        // "https://elpod.novorostorgi.ru/api/v1/lead/add",
+        "https://admin.novorostorgi.ru/api/v1/lead/add",
         values
         // `${BASE_URL}/test`,
         // formData
@@ -145,7 +150,8 @@ const App = ({}) => {
             timeZone: "Asia/Yekaterinburg",
           }),
       }); */
-      if (!data1.id) return;
+      // if (!data1.data.id) return;
+      const number = data1.data.id;
       setOrderNumber(data1.id);
       values = { ...values, order_number: data1.id };
 
@@ -155,7 +161,7 @@ const App = ({}) => {
       // );
       toast({
         position: "top",
-        title: `Ваша заявка номер ${data1.id} отправлена. В ближайшее время с Вами свяжется оператор`,
+        title: `Ваша заявка номер ${number} отправлена. В ближайшее время с Вами свяжется оператор`,
         // title: 'Заявка успешно отправлена. В ближайшее время с вами свяжется сотрудник',
         status: "success",
         duration: 5000,
@@ -352,8 +358,16 @@ const App = ({}) => {
                   </FormLabel>
                   <Input
                     id="person_fullname"
+                    placeholder="Иванов Иван Иванович"
                     {...register("person_fullname", {
                       required: "Поле обязательное для заполнения",
+                      validate: (value) =>
+                        value.split(" ").length < 3 /* ||
+                        value
+                          .split(" ")
+                          .filter((text) => text.trim().length === 0).length > 0 */
+                          ? "Введите ФИО в формате Иванов Иван Иванович"
+                          : true,
                     })}
                   />
                   <FormErrorMessage>
@@ -413,8 +427,18 @@ const App = ({}) => {
                   </FormLabel>
                   <Tabs variant="enclosed">
                     <TabList>
-                      <Tab>ИНН</Tab>
-                      <Tab>СНИЛС</Tab>
+                      <Tab>
+                        ИНН &nbsp;&nbsp;
+                        {isInnDataFilled ? (
+                          <CheckIcon color="whatsapp.400" />
+                        ) : null}
+                      </Tab>
+                      <Tab>
+                        СНИЛС &nbsp;&nbsp;
+                        {isSnilsDataFilled && isSnilsFileUploaded ? (
+                          <CheckIcon color="whatsapp.400" />
+                        ) : null}
+                      </Tab>
                       <Tab>
                         Паспортные данные &nbsp;&nbsp;
                         {isPassportDataFilled && isPassportFileUploaded ? (
@@ -469,6 +493,12 @@ const App = ({}) => {
                                   </Text>
                                 </>
                               )}
+                              {isInnFileUploaded ? (
+                                <>
+                                  &nbsp;&nbsp;
+                                  <CheckIcon color="whatsapp.400" />
+                                </>
+                              ) : null}
                             </b>
                           </div>
                         </div>
@@ -478,20 +508,30 @@ const App = ({}) => {
                             <div className="col-md-4">
                               <FormLabel fontSize="md">Номер ИНН:</FormLabel>
                             </div>
-                            <div className="col-md-8">
+                            <div className="col-md-7">
                               <Input
                                 id="person_inn"
                                 {...register("person_inn", {
                                   required: "Поле обязательное для заполнения",
-                                  validate: (value) =>
-                                    value.trim().length === 12
-                                      ? validateInn(value)
-                                      : "Введен неверный ИНН физического лица",
+                                  validate: (value) => {
+                                    // value.trim().length === 12c
+                                    // console.log(
+                                    //   "validateInn",
+                                    //   validateInn(value)
+                                    // );
+                                    return validateInn(value);
+                                  },
+                                  // : "Введен неверный ИНН физического лица",
                                 })}
                               />
                               <FormErrorMessage>
                                 {errors.person_inn && errors.person_inn.message}
                               </FormErrorMessage>
+                            </div>
+                            <div className="col-md-1">
+                              {isInnDataFilled ? (
+                                <CheckIcon color="whatsapp.400" mt="-1rem" />
+                              ) : null}
                             </div>
                           </div>
                         </FormControl>
@@ -529,6 +569,12 @@ const App = ({}) => {
                                 </Link>
                               )}
                             </b>
+                            {isSnilsFileUploaded ? (
+                              <>
+                                &nbsp;&nbsp;
+                                <CheckIcon color="whatsapp.400" />
+                              </>
+                            ) : null}
                           </div>
                         </div>
                         <br />
@@ -537,7 +583,7 @@ const App = ({}) => {
                             <div className="col-md-4">
                               <FormLabel fontSize="md">Номер СНИЛС</FormLabel>
                             </div>
-                            <div className="col-md-8">
+                            <div className="col-md-7">
                               <Input
                                 id="snils_number"
                                 {...register("snils_number", {
@@ -551,6 +597,14 @@ const App = ({}) => {
                                 {errors.snils_number &&
                                   errors.snils_number.message}
                               </FormErrorMessage>
+                            </div>
+                            <div
+                              className="col-md-1"
+                              style={{ marginTop: "-1rem" }}
+                            >
+                              {isInnDataFilled ? (
+                                <CheckIcon color="whatsapp.400" />
+                              ) : null}
                             </div>
                           </div>
                         </FormControl>
@@ -602,7 +656,7 @@ const App = ({}) => {
                               )}
                               {isPassportFileUploaded ? (
                                 <>
-                                  &nbsp;
+                                  &nbsp;&nbsp;
                                   <CheckIcon color="whatsapp.400" />
                                 </>
                               ) : null}
