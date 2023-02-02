@@ -56,8 +56,8 @@ const App = ({}) => {
   } = useForm({ mode: "all" });
 
   const API_URL = "https://lk.novorostorgi.ru/api/v1";
-  // const BASE_URL = "https://elpod.novorostorgi.ru/api/api";
-  const BASE_URL = "http://localhost:3080";
+  const BASE_URL = "https://elpod.novorostorgi.ru/api/api";
+  // const BASE_URL = "http://localhost:3080";
 
   const watchFiles = watch(["file_inn", "file_snils", "file_passport"]);
   const watchPassportData = watch([
@@ -329,9 +329,6 @@ const App = ({}) => {
                   <FormErrorMessage>
                     {errors.org_inn && errors.org_inn.message}
                   </FormErrorMessage>
-                  Failed to set the 'value' property on 'HTMLInputElement': This
-                  input element accepts a filename, which may only be
-                  programmatically set to the empty string
                 </FormControl>
                 {/* <FormControl isInvalid={!!errors.person_inn} mt="1rem">
                   <FormLabel fontSize="md">
